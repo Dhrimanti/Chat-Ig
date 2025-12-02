@@ -7,8 +7,13 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+
+
+int createsocket(){
+    return socket(AF_INET,SOCK_STREAM,0);
+}
 int main(){
-    int sockfd=socket(AF_INET,SOCK_STREAM,0);
+    int sockfd=createsocket();
     char* ip="74.125.24.100";
     struct sockaddr_in address;
     address.sin_family=AF_INET;
