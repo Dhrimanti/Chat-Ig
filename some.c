@@ -12,14 +12,18 @@ int main(){
     char* ip="74.125.24.100";
     struct sockaddr_in address;
     address.sin_family=AF_INET;
-    address.sin_port=htons(443);
+    address.sin_port=htons(80);
     inet_pton(AF_INET,ip,&address.sin_addr);
     int res=connect(sockfd,&address,sizeof(address));
     if(res==0){
         printf("Connection was successful");
     }
-    char* buffer;
-    buffer="GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n";
-    send(sockfd,buffer,strlen(buffer),0);
+    char* message;
+    message="GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n";
+    send(sockfd,message,strlen(message),0);
+    char buffer[4096];
+    recv(sockfd,buffer,4096,0);
+    printf("%s",buffer);
+
     return 0;
 }
