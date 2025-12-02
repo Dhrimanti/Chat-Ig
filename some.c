@@ -7,19 +7,27 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <malloc.h>
 
 
 int createsocket(){
     return socket(AF_INET,SOCK_STREAM,0);
 }
+
+
+struct sockaddr_in* createaddress(char *ip,int port){
+    
+    struct sockaddr_in *address=malloc(sizeof(struct sockaddr_in));
+    address->sin_family=AF_INET;
+    address->sin_port=htons(port);
+    inet_pton(AF_INET,ip,&address->sin_addr);
+    return address; 
+}
 int main(){
     int sockfd=createsocket();
-    char* ip="74.125.24.100";
-    struct sockaddr_in address;
-    address.sin_family=AF_INET;
-    address.sin_port=htons(80);
-    inet_pton(AF_INET,ip,&address.sin_addr);
-    int res=connect(sockfd,&address,sizeof(address));
+    struct sockaddr_in *address=createaddress("74.125.24.100",80);
+    
+    int res=connect(sockfd,address,sizeof(*address));
     if(res==0){
         printf("Connection was successful");
     }
